@@ -16,11 +16,9 @@ yarn install
 
 docker-compose up -d
 
-## 3- Aller dans le répértoire API et faire :
-
 go run main.go
 
-## 4- Aller sur votre locahost à l'adresse suivante :
+## 3- Aller sur votre locahost à l'adresse suivante :
 
 localhost:8080
 
