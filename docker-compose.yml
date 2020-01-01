@@ -1,0 +1,25 @@
+version: '3.2'
+
+services:
+  db:
+    image: postgres:9.6-alpine
+    environment:
+    - API_SECRET=98hbun98h
+    - POSTGRES_DB=gopost
+    - POSTGRES_USER=api-go
+    - POSTGRES_PASSWORD=lmdpe
+    ports:
+    - "5432:5432"
+  client:
+    build: './client'
+    volumes:
+    - './client:/home/node/app'
+    working_dir: '/home/node/app'
+    command: 'yarn serve'
+    ports:
+    - "8080:8080"
+    - "8000:8000"
+    environment:
+    - CHOKIDAR_USEPOLLING=true
+volumes:
+  db-data: {}
