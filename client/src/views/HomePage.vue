@@ -39,6 +39,15 @@
           >
             Vote
           </b-button>
+          <b-button
+            v-if="userVoted(poll, loggedUser.id)"
+            @click="deleteVote(poll.id)"
+            href="#"
+            variant="danger"
+          >
+            delete Vote
+          </b-button>
+
         </b-card>
       </b-col>
     </b-row>
@@ -157,6 +166,12 @@ export default {
       .then(() => this.getPolls())
       .catch((err) => console.log(err))
     },
+    deleteVote(id) {
+      this.$store.dispatch('deleteVote', id)
+      .then(() => this.getPolls())
+      .catch((err) => console.log(err))
+    },
+
 
     userVoted(poll, userId) {
       let result = false

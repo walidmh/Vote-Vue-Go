@@ -33,6 +33,9 @@ export default new Vuex.Store({
     add_vote_success(state) {
       state.status = 'Vote added'
     },
+    delete_vote_success(state) {
+      state.status = 'Vote deleted'
+    },
     create_user_success(state) {
       state.status = 'User created';
     },
@@ -182,6 +185,26 @@ export default new Vuex.Store({
         })
         .then(resp => {
           commit('add_vote_success')
+          resolve(resp)
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err)
+        })
+      })
+    },
+
+    deleteVote({commit}, id) {
+      return new Promise((resolve, reject) => {
+        axios({
+          url: 'http://localhost:8081/vote/' + id,
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        })
+        .then(resp => {
+          commit('delete_vote_success')
           resolve(resp)
         })
         .catch(err => {
