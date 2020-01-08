@@ -196,6 +196,60 @@ func (server *Server) Addvote(w http.ResponseWriter, r *http.Request){
 	responses.JSON(w, http.StatusOK, vote)
 }
 
+
+func (server *Server) Deleteuservote(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	// Is a valid vote id given to us?
+	pid, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+
+	// Is this user authenticated?
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+
+	// Check if the vote exist
+	vote := models.Vote{}
+	err = server.DB.Debug().Model(models.Vote{}).Where("id = ?", pid).Take(&vote).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
+		return
+	}
+
+
+	// Check if the vote exist
+	vote := models.Vote{}
+	err = server.DB.Debug().Model(models.Vote{}).Where("id = ?", pid).Take(&vote).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, errors.New("Vote not found"))
+		return
+	}
+
+	user := models.User{}
+	err = server.DB.Debug().Model(models.User{}).Where("id = ?", uid).Take(&user).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, errors.New("User not found"))
+		return
+	}
+
+	fmt.Printf("User id: %v", user.ID)
+	fmt.Printf(" Vote id: %v", vote.ID)
+
+	server.DB.Model(&vote).Association("Users").Delete(&user);
+
+	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
+	responses.JSON(w, http.StatusNoContent, "")
+}
+
+
+
 func (server *Server) Deletevote(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

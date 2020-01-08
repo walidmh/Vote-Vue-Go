@@ -24,5 +24,6 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/votes/{id}", middlewares.SetMiddlewareJSON(s.Getvote)).Methods("GET")
 	s.Router.HandleFunc("/vote/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.Addvote))).Methods("PUT")
 	s.Router.HandleFunc("/votes/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.Updatevote))).Methods("PUT")
+	s.Router.HandleFunc("/vote/{id}", middlewares.SetMiddlewareAuthentication(s.Deleteuservote)).Methods("DELETE")
 	s.Router.HandleFunc("/votes/{id}", middlewares.SetMiddlewareAuthentication(s.Deletevote)).Methods("DELETE")
 }
