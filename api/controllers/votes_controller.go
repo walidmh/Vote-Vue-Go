@@ -219,15 +219,6 @@ func (server *Server) Deleteuservote(w http.ResponseWriter, r *http.Request) {
 	vote := models.Vote{}
 	err = server.DB.Debug().Model(models.Vote{}).Where("id = ?", pid).Take(&vote).Error
 	if err != nil {
-		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
-		return
-	}
-
-
-	// Check if the vote exist
-	vote := models.Vote{}
-	err = server.DB.Debug().Model(models.Vote{}).Where("id = ?", pid).Take(&vote).Error
-	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Vote not found"))
 		return
 	}
